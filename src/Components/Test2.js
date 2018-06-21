@@ -54,8 +54,7 @@ class Test2 extends Component {
             modalDelete: false,
             closeAll: false,
             collapsed: true,
-            dropdownOpen: false,
-            size: 300
+            dropdownOpen: false
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleShow = this.handleShow.bind(this);
@@ -80,7 +79,8 @@ class Test2 extends Component {
 
     modalSettingtoggle() {
         this.setState({
-            modalSetting: !this.state.modalSetting
+            modalSetting: !this.state.modalSetting,
+            isVisible: !this.state.isVisible
         });
     }
 
@@ -100,7 +100,7 @@ class Test2 extends Component {
 
     modalEdittoggle() {
         this.setState({
-            modalEdit: !this.state.modalEdit
+            modalEdit: !this.state.modalEdit,
         });
     }
 
@@ -168,7 +168,8 @@ class Test2 extends Component {
             startDate: '',
             endDate: '',
             modalEdit: !this.state.modalEdit,
-            modalSetting: !this.state.modalSetting
+            modalSetting: !this.state.modalSetting,
+            isVisible: !this.state.isVisible
         });
     }
 
@@ -177,7 +178,8 @@ class Test2 extends Component {
         itemRef.remove();
         this.setState({
             modalDelete: !this.state.modalDelete,
-            modalSetting: !this.state.modalSetting
+            modalSetting: !this.state.modalSetting,
+            isVisible: !this.state.isVisible
         });
     }
 
@@ -225,7 +227,7 @@ class Test2 extends Component {
         return (
             <div>
                 <Button outline color="info" onClick={this.handleShow}>{this.props.buttonLabel}แสดงงาน</Button>
-                <Dock  position='bottom' onSizeChange='300' dimMode='none' isVisible={this.state.isVisible}>
+                <Dock position='bottom' dimMode='none' isVisible={this.state.isVisible}>
                     <div>
                         <Row>
                             <Col>
