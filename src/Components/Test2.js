@@ -33,8 +33,6 @@ import {
 } from 'reactstrap';
 import './Task.css';
 import Dock from 'react-dock';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
-import 'react-day-picker/lib/style.css';
 import picfarm from './picfarm.jpg';
 
 
@@ -65,7 +63,6 @@ class Test2 extends Component {
         this.modalAddtoggle = this.modalAddtoggle.bind(this);
         this.modalEdittoggle = this.modalEdittoggle.bind(this);
         this.modalDeletetoggle = this.modalDeletetoggle.bind(this);
-        this.dropdowntoggle = this.dropdowntoggle.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -110,12 +107,6 @@ class Test2 extends Component {
         this.setState({
             modalDelete: !this.state.modalDelete
         });
-    }
-
-    dropdowntoggle() {
-        this.setState(prevState => ({
-            dropdownOpen: !prevState.dropdownOpen
-        }));
     }
 
     handleSubmit(e) {
@@ -229,12 +220,12 @@ class Test2 extends Component {
         return (
             <div>
                 <Button outline color="info" onClick={this.handleShow}>{this.props.buttonLabel}แสดงงาน</Button>
-                <Dock size ='0.55' position='bottom' dimMode='none' isVisible={this.state.isVisible}>
+                <Dock size='0.6' position='bottom' dimMode='none' isVisible={this.state.isVisible}>
                     <div>
                         <Row>
                             <Col>
-                                <div onClick={() => this.setState({ isVisible: !this.state.isVisible })}>X
-                            <div class="block">
+                                <div><Button onClick={() => this.setState({ isVisible: !this.state.isVisible })}>ปิด</Button>
+                                    <div class="block">
                                         <Button outline color="info" onClick={this.modalAddtoggle}>{this.props.buttonLabel}เพิ่มงาน</Button>
                                         <br />  <br />
                                     </div></div></Col>
