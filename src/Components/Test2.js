@@ -35,6 +35,7 @@ import './Task.css';
 import Dock from 'react-dock';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
+import picfarm from './picfarm.jpg';
 
 
 class Test2 extends Component {
@@ -54,7 +55,8 @@ class Test2 extends Component {
             modalDelete: false,
             closeAll: false,
             collapsed: true,
-            dropdownOpen: false
+            dropdownOpen: false,
+            size: 300
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleShow = this.handleShow.bind(this);
@@ -227,14 +229,14 @@ class Test2 extends Component {
         return (
             <div>
                 <Button outline color="info" onClick={this.handleShow}>{this.props.buttonLabel}แสดงงาน</Button>
-                <Dock position='bottom' dimMode='none' isVisible={this.state.isVisible}>
+                <Dock size ='0.55' position='bottom' dimMode='none' isVisible={this.state.isVisible}>
                     <div>
                         <Row>
                             <Col>
                                 <div onClick={() => this.setState({ isVisible: !this.state.isVisible })}>X
                             <div class="block">
                                         <Button outline color="info" onClick={this.modalAddtoggle}>{this.props.buttonLabel}เพิ่มงาน</Button>
-                                        <br />
+                                        <br />  <br />
                                     </div></div></Col>
                         </Row>
                         {this.state.items.map((item) => {
@@ -242,7 +244,7 @@ class Test2 extends Component {
                                 <div key={item.id}>
                                     <div class="card2">
                                         <div>
-                                            <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97130&w=318&h=130" className="pic" alt="Card image cap" />
+                                            <img src={picfarm} className="pic" alt="Card image cap" />
                                             <div class="block2">
                                                 <Button color="info" onClick={this.modalSettingtoggle}>{this.props.buttonLabel}ตั้งค่า</Button>
                                             </div>
