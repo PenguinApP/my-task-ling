@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "test-project-ling",
+    "staging": "test-project-ling"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "my-task",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "^4.1.1",
+    "react": "^16.4.1",
+    "react-addons-css-transition-group": "^15.6.2",
+    "react-bootstrap": "^0.32.1",
+    "react-day-picker": "^7.1.9",
+    "react-dock": "^0.2.4",
+    "react-dom": "^16.4.1",
+    "react-modal": "^3.4.5",
+    "react-scripts": "1.1.4",
+    "react-sliding-pane": "^2.0.2",
+    "react-transition-group": "^2.3.1",
+    "reactjs-popup": "^1.1.1",
+    "reactstrap": "^6.1.0",
+    "rn-sliding-up-panel": "^1.2.0",
+    "uuid": "^3.2.1",
+    "webfontloader": "^1.6.28"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
