@@ -37,7 +37,7 @@ import picfarm from './picfarm.jpg';
 import Popup from "reactjs-popup";
 import './Popup.css';
 import './Delete.css';
-import Upload from './upload';
+
 
 class Test2 extends Component {
     constructor(props) {
@@ -96,7 +96,6 @@ class Test2 extends Component {
     modalEdittoggle() {
         this.setState({
             modalEdit: !this.state.modalEdit,
-            isVisible: !this.state.isVisible
         });
     }
 
@@ -166,6 +165,11 @@ class Test2 extends Component {
     removeItem(itemId) {
         const itemRef = firebase.database().ref('item/' + itemId);
         itemRef.remove();
+        this.setState({
+            modalDelete: !this.state.modalDelete,
+            modalSetting: !this.state.modalSetting,
+            isVisible: !this.state.isVisible
+        });
     }
 
     componentDidMount() {
@@ -210,7 +214,7 @@ class Test2 extends Component {
     }
     render() {
         return (
-            <div class="Home">
+            <div>
                 <Button color="primary" onClick={this.handleShow}>{this.props.buttonLabel}แสดงงาน</Button>
                 <Dock size='0.6' position='bottom' dimMode='none' isVisible={this.state.isVisible}>
                     <div>
@@ -232,53 +236,50 @@ class Test2 extends Component {
                                         <div class="container">
                                             <br />
                                             <div class="block2">
-
-                                                <Button key={item.id} color="secondary" onClick={this.modalEdittoggle}>{this.props.buttonLabel}แก้ไข</Button>
-
-                                                <Modal key={item.id} isOpen={this.state.modalEdit} toggle={this.modalEdittoggle} className={this.props.className}>
-                                                    <ModalHeader toggle={this.modalEdittoggle}>แก้ไขงาน</ModalHeader>
-                                                    <ModalBody>
-                                                        <Form>
-                                                            <FormGroup>
-                                                                <Label for="taskName">ชื่องาน</Label>
-                                                                <Input type="text" name="taskName" onChange={this.handleChange} value={this.state.taskName} />
-                                                            </FormGroup>
-                                                            <FormGroup>
-                                                                <Label for="startDate">startDate</Label>
-                                                                <Input type="date" name="startDate" onChange={this.handleChange} value={this.state.startDate} />
-                                                            </FormGroup>
-                                                            {' '}
-                                                            <FormGroup>
-                                                                <Label for="endDate">endDate</Label>
-                                                                <Input type="date" name="endDate" onChange={this.handleChange} value={this.state.endDate} />
-                                                            </FormGroup>
-                                                            <FormGroup>
-                                                                <Label for="description">คำอธิบาย</Label>
-                                                                <Input type="text" name="description" onChange={this.handleChange} value={this.state.description} />
-                                                            </FormGroup>
-                                                        </Form>
-                                                    </ModalBody>
-                                                    <ModalFooter>
-                                                        <Button outline color="secondary" onClick={this.modalEdittoggle}>ยกเลิก</Button>{' '}
-                                                        <Button color="primary" onClick={() => this.handleUpdate(item.id)}>บันทึก</Button>
-                                                    </ModalFooter>
-                                                </Modal>
-
-
-                                                <Popup trigger={<Button color="danger" className="button"> ลบ </Button>} modal>
+                                                <Popup trigger={<Button color="secondary" className="button"> Edit </Button>} modal>
                                                     {close => (
                                                         <div className="Dmodal">
-                                                            <div className="Dheader"> ยืนยันการลบ </div>
+                                                            <div className="Dheader"> Edit </div>
+                                                            <div className="Dcontent">
+                                                                <br /><br />
+                                                                <p>&nbsp;Task Name : <input type="text" name="taskName" placeholder={item.taskName} onChange={this.handleChange} value={this.state.taskName} /></p>
+                                                                <br /><br />
+                                                                <p>&nbsp;Description : <input type="text" name="description" placeholder={item.description} onChange={this.handleChange} value={this.state.description} /></p>
+                                                                <br /><br />
+                                                                <p>&nbsp;Start : <input type="date" name="startDate" onChange={this.handleChange} value={this.state.startDate} /></p>
+                                                                <br /><br />
+                                                                <p>&nbsp;End : <input type="date" name="endDate" onChange={this.handleChange} value={this.state.endDate} /></p>
+                                                                <br /><br />
+                                                            </div>
                                                             <div className="Dactions">
-                                                                <Button color="danger" className="button" onClick={() => this.removeItem(item.id)}>ลบ</Button>
-                                                                <Button
+
+                                                                <button className="button" onClick={() => this.handleUpdate(item.id) & close()}>Yes</button>
+                                                                <button
                                                                     className="button"
                                                                     onClick={() => {
                                                                         console.log('modal closed')
                                                                         close()
                                                                     }}
                                                                 >
-                                                                    ยกเลิก</Button>
+                                                                    No</button>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </Popup>
+                                                <Popup trigger={<Button color="danger" className="button"> Delete </Button>} modal>
+                                                    {close => (
+                                                        <div className="Dmodal">
+                                                            <div className="Dheader"> Delete </div>
+                                                            <div className="Dactions">
+                                                                <button className="button" onClick={() => this.removeItem(item.id)}>Yes</button>
+                                                                <button
+                                                                    className="button"
+                                                                    onClick={() => {
+                                                                        console.log('modal closed')
+                                                                        close()
+                                                                    }}
+                                                                >
+                                                                    No</button>
                                                             </div>
                                                         </div>
                                                     )}
@@ -297,7 +298,6 @@ class Test2 extends Component {
                     </div>
 
                 </Dock>
-
 
                 <Modal isOpen={this.state.modalAdd} toggle={this.modalAddtoggle} className={this.props.className}>
                     <ModalHeader toggle={this.modalAddtoggle}>เพิ่มงาน</ModalHeader>
@@ -327,6 +327,64 @@ class Test2 extends Component {
                         <Button color="primary" onClick={(e) => this.handleSubmit(e)}>สร้าง</Button>
                     </ModalFooter>
                 </Modal>
+
+                <Modal isOpen={this.state.modalSetting} toggle={this.modalSettingtoggle} className={this.props.className}>
+                    <ModalHeader toggle={this.modalSettingtoggle}>ตั้งค่า</ModalHeader>
+                    <ModalBody>
+                        <div class="setting">
+                            <button color="warning" class="buttonedit" onClick={this.modalEdittoggle}>{this.props.buttonLabel}แก้ไข</button><br />
+
+                            <button color="danger" class="buttonedit" onClick={this.modalDeletetoggle}>{this.props.buttonLabel}ลบ</button><br />
+
+                            <button color="secondary" class="buttonedit" >{this.props.buttonLabel}แชร์</button>
+                        </div>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button outline color="secondary" onClick={this.modalSettingtoggle}>ยกเลิก</Button>{' '}
+                    </ModalFooter>
+                </Modal>
+
+                <Modal isOpen={this.state.modalEdit} toggle={this.modalEdittoggle} className={this.props.className}>
+                    <ModalHeader toggle={this.modalEdittoggle}>แก้ไขงาน </ModalHeader>
+                    <ModalBody>
+                        <Form>
+                            <FormGroup>
+                                <Label for="taskName">ชื่องาน</Label>
+                                <Input type="text" name="taskName" onChange={this.handleChange} value={this.state.taskName} />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="startDate">startDate</Label>
+                                <Input type="date" name="startDate" onChange={this.handleChange} value={this.state.startDate} />
+                            </FormGroup>
+                            {' '}
+                            <FormGroup>
+                                <Label for="endDate">endDate</Label>
+                                <Input type="date" name="endDate" onChange={this.handleChange} value={this.state.endDate} />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="description">คำอธิบาย</Label>
+                                <Input type="text" name="description" onChange={this.handleChange} value={this.state.description} />
+                            </FormGroup>
+                        </Form>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button outline color="secondary" onClick={this.modalEdittoggle}>ยกเลิก</Button>{' '}
+                        <Button color="primary" onClick={() => this.handleUpdate()}>บันทึก</Button>
+                    </ModalFooter>
+                </Modal>
+
+                <Modal isOpen={this.state.modalDelete} toggle={this.modalDeletetoggle} className={this.props.className}>
+                    <ModalHeader toggle={this.modalDeletetoggle}>ยืนยันการลบ</ModalHeader>
+                    <ModalBody>
+                        <div class="setting">
+                            <button color="warning" class="buttonedit" onClick={() => this.removeItem()}>{this.props.buttonLabel}ยืนยัน</button><br />
+                            <button color="secondary" class="buttonedit" onClick={this.modalDeletetoggle}>{this.props.buttonLabel}ยกเลิก</button>
+                        </div>
+                    </ModalBody>
+                    <ModalFooter>
+                    </ModalFooter>
+                </Modal>
+
             </div>
         )
     }
