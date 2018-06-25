@@ -38,6 +38,7 @@ import Popup from "reactjs-popup";
 import './Delete.css';
 import Upload from './upload';
 import EditModal from './EditModal';
+import FileUpload from './FileUpload';
 
 class Test2 extends Component {
     constructor(props) {
@@ -47,18 +48,20 @@ class Test2 extends Component {
             description: '',
             startDate: '',
             endDate: '',
+            picture: null,
             items: [],
             user: null,
-            TaskId: null,
             isVisible: false,
             modalAdd: false,
-            modalEdit: false
+            modalEdit: false,
+            uploadValue: 0,
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleShow = this.handleShow.bind(this);
         this.modalAddtoggle = this.modalAddtoggle.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.modalEdittoggle = this.modalEdittoggle.bind(this);
+        this.handleUpload = this.handleUpload.bind(this);
     }
 
     handleChange(e) {
@@ -85,6 +88,12 @@ class Test2 extends Component {
         });
     }
 
+    AddPicture(item) {
+        this.setState({
+            picture: this.state.picture
+        });
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         var itemsRef = firebase.database().ref('item');
@@ -102,7 +111,7 @@ class Test2 extends Component {
             startDate: sd.getTime(),
             endDate: ed.getTime(),
             user: this.state.user.displayName || this.state.user.email,
-            TaskId: this.state.TaskId
+            picture: this.state.picture
         }
         itemsRef.push(item);
         this.setState({
@@ -110,11 +119,37 @@ class Test2 extends Component {
             description: '',
             startDate: '',
             endDate: '',
+            picture: '',
             modalAdd: !this.state.modalAdd,
             isVisible: true
         });
     }
 
+    handleUpload(event) {
+        var tempThis = this;
+        var file = event.target.files[0];
+        var storageRef = firebase.storage().ref(`/filepond/${file.name}`);
+        var task = storageRef.put(file);
+
+        task.on('state_changed', snapshot => {
+            let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            this.setState({
+                uploadValue: percentage
+            })
+        }, error => {
+            console.log(error.message);
+
+        }, function () {
+            task.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+                console.log('The download URL : ', downloadURL);
+                tempThis.setState({
+                    uploadValue: 100,
+                    picture: downloadURL
+
+                });
+            });
+        });
+    }
 
     componentDidMount() {
         auth.onAuthStateChanged((user) => {
@@ -148,7 +183,8 @@ class Test2 extends Component {
                     description: childData.description,
                     startDate: sdstring,
                     endDate: edstring,
-                    user: childData.user
+                    user: childData.user,
+                    picture: childData.picture
                 });
             });
             this.setState({
@@ -157,6 +193,7 @@ class Test2 extends Component {
         });
     }
     render() {
+        const { picture } = this.state;
         return (
             <div class="Home" >
                 <Button color="primary" onClick={this.handleShow}>{this.props.buttonLabel}แสดงงาน</Button>
@@ -175,7 +212,7 @@ class Test2 extends Component {
                                 <div key={item.id}>
                                     <div class="card2">
                                         <div>
-                                            <img src={picfarm} className="pic" alt="Card image" />
+                                            <img src={item.picture} className="pic" alt="Card image" />
                                         </div>
                                         <div class="container">
                                             <br />
@@ -224,6 +261,17 @@ class Test2 extends Component {
                             <FormGroup>
                                 <Label for="description">คำอธิบาย</Label>
                                 <Input type="text" name="description" onChange={this.handleChange} value={this.state.description} />
+                            </FormGroup>
+                            <FormGroup>
+                                <div>
+                                    <progress value={this.state.uploadValue} max="100">
+                                        {this.state.uploadValue} %
+                            </progress>
+                                    <br />
+                                    <input type="file" onChange={this.handleUpload} />
+                                    <br />
+                                    <img src={picture} alt="" />
+                                </div>
                             </FormGroup>
                         </Form>
                     </ModalBody>
