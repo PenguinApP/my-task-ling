@@ -18,31 +18,31 @@ img {
   font-size: 12px;
 }
   
-  .remove-btn {
+.remove-btn {
     margin-right: 0.5rem;
-  }
+}
   
-  .fade-enter {
+.fade-enter {
     opacity: 0.01;
-  }
-  .fade-enter-active {
-    opacity: 1;
+}
+.fade-enter-active {
+  opacity: 1;
     transition: opacity 500ms ease-in;
-  }
-  .fade-exit {
+}
+.fade-exit {
     opacity: 1;
-  }
-  .fade-exit-active {
+}
+.fade-exit-active {
     opacity: 0.01;
     transition: opacity 500ms ease-in;
-  }
+}
 
-  .static-modal{
+.static-modal{
     border: 1px solid #ccc;
     border-radius: 10px;
-  }
+}
 
-  .block{
+.block{
     float: right;
   }
 .block2 {
@@ -52,6 +52,10 @@ img {
 
 .block3 {
   float: left;
+}
+
+.block4 {
+  float: right;
 }
 
 .pic{
@@ -73,4 +77,39 @@ width: 100px;
 
 .Home{
   font-family: 'Prompt', sans-serif;
+}
+
+.MadalAdd{
+  font-family: 'Prompt', sans-serif;
+}
+
+body {margin:0;}
+
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.navbar a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.navbar a:hover {
+  background: #ddd;
+  color: black;
+}
+
+.main {
+  padding: 16px;
+  margin-top: 30px;
+  height: 1500px; /* Used in this example to enable scrolling */
 }

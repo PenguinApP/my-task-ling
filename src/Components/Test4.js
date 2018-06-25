@@ -242,7 +242,7 @@ class Test2 extends Component {
                                                             <div className="Dheader"> Edit </div>
                                                             <div className="Dcontent">
                                                                 <br /><br />
-                                                                <p>&nbsp;Task Name : <input type="text" name="taskName" placeholder={item.taskName} onChange={this.handleChange} value={this.state.taskName} /></p>
+                                                                <p>&nbsp;Task Name : <input type="text" name="taskName" placeholder={this.props.taskName} onChange={this.handleChange} value={this.state.taskName} /></p>
                                                                 <br /><br />
                                                                 <p>&nbsp;Description : <input type="text" name="description" placeholder={item.description} onChange={this.handleChange} value={this.state.description} /></p>
                                                                 <br /><br />

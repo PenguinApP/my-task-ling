@@ -35,9 +35,9 @@ import './Task.css';
 import Dock from 'react-dock';
 import picfarm from './picfarm.jpg';
 import Popup from "reactjs-popup";
-import './Popup.css';
 import './Delete.css';
 import Upload from './upload';
+import EditModal from './EditModal';
 
 class Test2 extends Component {
     constructor(props) {
@@ -49,23 +49,16 @@ class Test2 extends Component {
             endDate: '',
             items: [],
             user: null,
+            TaskId: null,
             isVisible: false,
             modalAdd: false,
-            modalEdit: false,
-            modalSetting: false,
-            modalDelete: false,
-            closeAll: false,
-            collapsed: true,
-            dropdownOpen: false,
-            size: 300
+            modalEdit: false
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleShow = this.handleShow.bind(this);
-        this.modalSettingtoggle = this.modalSettingtoggle.bind(this);
         this.modalAddtoggle = this.modalAddtoggle.bind(this);
-        this.modalEdittoggle = this.modalEdittoggle.bind(this);
-        this.modalDeletetoggle = this.modalDeletetoggle.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.modalEdittoggle = this.modalEdittoggle.bind(this);
     }
 
     handleChange(e) {
@@ -78,11 +71,10 @@ class Test2 extends Component {
         this.setState({ isVisible: true });
     }
 
-    modalSettingtoggle() {
+    modalEdittoggle(item) {
         this.setState({
-            modalSetting: !this.state.modalSetting,
+            modalEdit: !this.state.modalEdit,
             isVisible: !this.state.isVisible
-
         });
     }
 
@@ -90,19 +82,6 @@ class Test2 extends Component {
         this.setState({
             modalAdd: !this.state.modalAdd,
             isVisible: !this.state.isVisible
-        });
-    }
-
-    modalEdittoggle() {
-        this.setState({
-            modalEdit: !this.state.modalEdit,
-            isVisible: !this.state.isVisible
-        });
-    }
-
-    modalDeletetoggle() {
-        this.setState({
-            modalDelete: !this.state.modalDelete
         });
     }
 
@@ -122,7 +101,8 @@ class Test2 extends Component {
             description: this.state.description,
             startDate: sd.getTime(),
             endDate: ed.getTime(),
-            user: this.state.user.displayName || this.state.user.email
+            user: this.state.user.displayName || this.state.user.email,
+            TaskId: this.state.TaskId
         }
         itemsRef.push(item);
         this.setState({
@@ -135,38 +115,6 @@ class Test2 extends Component {
         });
     }
 
-    handleUpdate(itemId) {
-        var itemRef = firebase.database().ref('item/' + itemId);
-
-        var sd = new Date(this.state.startDate);
-
-        console.log(sd);
-
-        var ed = new Date(this.state.endDate);
-        console.log(ed);
-
-        var item = {
-            taskName: this.state.taskName,
-            description: this.state.description,
-            startDate: sd.getTime(),
-            endDate: ed.getTime(),
-        }
-        itemRef.update(item);
-        this.setState({
-            taskName: '',
-            description: '',
-            startDate: '',
-            endDate: '',
-            modalEdit: !this.state.modalEdit,
-            modalSetting: !this.state.modalSetting,
-            isVisible: !this.state.isVisible
-        });
-    }
-
-    removeItem(itemId) {
-        const itemRef = firebase.database().ref('item/' + itemId);
-        itemRef.remove();
-    }
 
     componentDidMount() {
         auth.onAuthStateChanged((user) => {
@@ -210,9 +158,9 @@ class Test2 extends Component {
     }
     render() {
         return (
-            <div class="Home">
+            <div class="Home" >
                 <Button color="primary" onClick={this.handleShow}>{this.props.buttonLabel}แสดงงาน</Button>
-                <Dock size='0.6' position='bottom' dimMode='none' isVisible={this.state.isVisible}>
+                <Dock size="0.6" position="bottom" dimMode="none" isVisible={this.state.isVisible}>
                     <div>
                         <Row>
                             <Col>
@@ -227,62 +175,20 @@ class Test2 extends Component {
                                 <div key={item.id}>
                                     <div class="card2">
                                         <div>
-                                            <img src={picfarm} className="pic" alt="Card image cap" />
+                                            <img src={picfarm} className="pic" alt="Card image" />
                                         </div>
                                         <div class="container">
                                             <br />
                                             <div class="block2">
-
-                                                <Button key={item.id} color="secondary" onClick={this.modalEdittoggle}>{this.props.buttonLabel}แก้ไข</Button>
-
-                                                <Modal key={item.id} isOpen={this.state.modalEdit} toggle={this.modalEdittoggle} className={this.props.className}>
-                                                    <ModalHeader toggle={this.modalEdittoggle}>แก้ไขงาน</ModalHeader>
-                                                    <ModalBody>
-                                                        <Form>
-                                                            <FormGroup>
-                                                                <Label for="taskName">ชื่องาน</Label>
-                                                                <Input type="text" name="taskName" onChange={this.handleChange} value={this.state.taskName} />
-                                                            </FormGroup>
-                                                            <FormGroup>
-                                                                <Label for="startDate">startDate</Label>
-                                                                <Input type="date" name="startDate" onChange={this.handleChange} value={this.state.startDate} />
-                                                            </FormGroup>
-                                                            {' '}
-                                                            <FormGroup>
-                                                                <Label for="endDate">endDate</Label>
-                                                                <Input type="date" name="endDate" onChange={this.handleChange} value={this.state.endDate} />
-                                                            </FormGroup>
-                                                            <FormGroup>
-                                                                <Label for="description">คำอธิบาย</Label>
-                                                                <Input type="text" name="description" onChange={this.handleChange} value={this.state.description} />
-                                                            </FormGroup>
-                                                        </Form>
-                                                    </ModalBody>
-                                                    <ModalFooter>
-                                                        <Button outline color="secondary" onClick={this.modalEdittoggle}>ยกเลิก</Button>{' '}
-                                                        <Button color="primary" onClick={() => this.handleUpdate(item.id)}>บันทึก</Button>
-                                                    </ModalFooter>
-                                                </Modal>
-
-
-                                                <Popup trigger={<Button color="danger" className="button"> ลบ </Button>} modal>
-                                                    {close => (
-                                                        <div className="Dmodal">
-                                                            <div className="Dheader"> ยืนยันการลบ </div>
-                                                            <div className="Dactions">
-                                                                <Button color="danger" className="button" onClick={() => this.removeItem(item.id)}>ลบ</Button>
-                                                                <Button
-                                                                    className="button"
-                                                                    onClick={() => {
-                                                                        console.log('modal closed')
-                                                                        close()
-                                                                    }}
-                                                                >
-                                                                    ยกเลิก</Button>
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </Popup>
+                                                <EditModal
+                                                    taskName={item.taskName}
+                                                    description={item.description}
+                                                    startDate={item.startDate}
+                                                    endDate={item.endDate}
+                                                    id={item.id}
+                                                    modalEdittoggle={this.modalEdittoggle}
+                                                    handleShow={this.handleShow}
+                                                />
                                             </div>
                                             <CardTitle>{item.taskName}</CardTitle>
                                             <CardText>{item.description}</CardText>
@@ -297,7 +203,6 @@ class Test2 extends Component {
                     </div>
 
                 </Dock>
-
 
                 <Modal isOpen={this.state.modalAdd} toggle={this.modalAddtoggle} className={this.props.className}>
                     <ModalHeader toggle={this.modalAddtoggle}>เพิ่มงาน</ModalHeader>
@@ -327,7 +232,7 @@ class Test2 extends Component {
                         <Button color="primary" onClick={(e) => this.handleSubmit(e)}>สร้าง</Button>
                     </ModalFooter>
                 </Modal>
-            </div>
+            </div >
         )
     }
 }
