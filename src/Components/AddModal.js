@@ -13,26 +13,25 @@ import {
 } from 'reactstrap';
 import './Task.css';
 import picfarm from './Picture/picfarm.jpg';
-import './Delete.css';
 
 
-class EditModal extends Component {
+class AddModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            modalEdit: false,
-            modalDelete: false,
-            picture: this.props.picture,
-            taskName: this.props.taskName,
-            description: this.props.description,
-            startDate: this.props.startDate,
-            endDate: this.props.endDate
-
+            taskName: '',
+            description: '',
+            startDate: '',
+            endDate: '',
+            modalAdd: false,
+            picture: null,
+            Picturename: null,
+            user: this.props.user
         }
         this.handleSave = this.handleSave.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
     }
 
     handleChange(e) {
@@ -41,8 +40,9 @@ class EditModal extends Component {
         });
     }
 
-    handleUpdate(itemId) {
-        var itemRef = firebase.database().ref('item/' + itemId);
+    handleSubmit(e) {
+        e.preventDefault();
+        var itemRef = firebase.database().ref('item');
 
         var sd = new Date(this.state.startDate);
 
@@ -57,17 +57,17 @@ class EditModal extends Component {
             startDate: sd.getTime(),
             endDate: ed.getTime(),
             picture: this.state.picture,
+            user: this.state.user.email
         }
-        itemRef.update(item);
+        itemRef.push(item);
         this.setState({
             taskName: '',
             description: '',
             startDate: '',
             endDate: '',
             picture: '',
-            modalEdit: !this.state.modalEdit,
+            modalAdd: !this.state.modalAdd,
         });
-
     }
 
     handleUpload(event) {
@@ -90,33 +90,18 @@ class EditModal extends Component {
                 tempThis.setState({
                     uploadValue: 100,
                     picture: downloadURL
-
                 });
+
             });
         });
-    }
 
-    removeItem(itemId) {
-        const itemRef = firebase.database().ref('item/' + itemId);
-        itemRef.remove();
-        this.setState({
-            modalDelete: !this.state.modalDelete
-        });
     }
 
     handleSave() {
         const item = this.state;
-        this.props.modalEdittoggle(item)
+        this.props.modalAddtoggle(item)
         this.setState({
-            modalEdit: !this.state.modalEdit
-        });
-    }
-
-    handleDelete() {
-        const item = this.state;
-        this.props.modalDeletetoggle(item)
-        this.setState({
-            modalDelete: !this.state.modalDelete
+            modalAdd: !this.state.modalAdd
         });
     }
 
@@ -124,9 +109,9 @@ class EditModal extends Component {
         const { picture } = this.state;
         return (
             <div>
-                <Button color="secondary" onClick={this.handleSave}>{this.props.buttonLabel}แก้ไข</Button>
-                <Modal isOpen={this.state.modalEdit} toggle={this.handleSave} className={this.props.className}>
-                    <ModalHeader toggle={this.handleSave}>แก้ไขงาน </ModalHeader>
+                <Button outline color="secondary" onClick={this.handleSave} block>{this.props.buttonLabel}เพิ่มงาน</Button>
+                <Modal isOpen={this.state.modalAdd} toggle={this.handleSave} className={this.props.className}>
+                    <ModalHeader toggle={this.handleSave}>เพิ่มงาน</ModalHeader>
                     <ModalBody>
                         <Form>
                             <FormGroup>
@@ -161,23 +146,11 @@ class EditModal extends Component {
                     </ModalBody>
                     <ModalFooter>
                         <Button outline color="secondary" onClick={this.handleSave}>ยกเลิก</Button>{' '}
-                        <Button color="primary" onClick={() => this.handleUpdate(this.props.id)}>บันทึก</Button>
-                    </ModalFooter>
-                </Modal>
-
-                <Button color="danger" onClick={this.handleDelete}>{this.props.buttonLabel}ลบ</Button>
-                <Modal isOpen={this.state.modalDelete} toggle={this.handleDelete} className={this.props.className}>
-                    <ModalHeader toggle={this.handleDelete}>ยืนยันการลบ</ModalHeader>
-                    <ModalBody>
-                        <p class="Deletetext">หากลบงานที่เลือกแล้ว จะไม่สามารถกู้คืนได้</p>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button outline color="secondary" onClick={this.handleDelete}>ยกเลิก</Button>{' '}
-                        <Button color="danger" onClick={() => this.removeItem(this.props.id)}>ลบ</Button>
+                        <Button color="primary" onClick={(e) => this.handleSubmit(e)}>สร้าง</Button>
                     </ModalFooter>
                 </Modal>
             </div>
         )
     }
 }
-export default EditModal;
+export default AddModal;

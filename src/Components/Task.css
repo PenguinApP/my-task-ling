@@ -12,7 +12,7 @@ img {
   width: 100%;
 }
 
-.container {
+.Tcontainer {
   padding: 2px 16px;
   font-family: 'Prompt', sans-serif;
   font-size: 12px;
@@ -83,33 +83,20 @@ width: 100px;
   font-family: 'Prompt', sans-serif;
 }
 
-body {margin:0;}
-
-.navbar {
-  overflow: hidden;
-  background-color: #333;
-  position: fixed;
-  top: 0;
+#map {
   width: 100%;
+  height: 400px;
+  background-color: grey;
 }
 
-.navbar a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
+P.Deletetext{
+  color: #A19F9F;
 }
 
-.navbar a:hover {
-  background: #ddd;
-  color: black;
+p.UserTopTask{
+  font-size: 15px;
 }
 
-.main {
-  padding: 16px;
-  margin-top: 30px;
-  height: 1500px; /* Used in this example to enable scrolling */
+.btnTopTask{
+  width: 30px;
 }
